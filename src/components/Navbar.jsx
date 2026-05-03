@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FileText, LayoutDashboard, Settings, Globe } from 'lucide-react';
+import { FileText, LayoutDashboard, Settings, Globe, Menu, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 function Navbar() {
   const location = useLocation();
   const { t, i18n } = useTranslation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -19,7 +21,7 @@ function Navbar() {
       zIndex: 10,
       boxShadow: 'var(--shadow-sm)'
     }}>
-      <div className="container flex items-center justify-between" style={{ height: '70px' }}>
+      <div className="container navbar-container flex items-center justify-between" style={{ height: '70px' }}>
         <Link to="/" className="flex items-center gap-sm text-primary" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>
           <div style={{
             width: '40px', height: '40px', 
@@ -33,23 +35,34 @@ function Navbar() {
           Trans-All In One
         </Link>
         
-        <nav className="flex items-center gap-md">
-          <Link to="/" style={{ color: location.pathname === '/' ? 'var(--color-primary)' : 'var(--color-text)', fontWeight: 500 }}>
+        {/* Mobile Menu Toggle Button */}
+        <button 
+          className="mobile-menu-btn" 
+          style={{ border: 'none', padding: '0.5rem', cursor: 'pointer' }}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+
+        <nav className={`nav-menu gap-md ${isMenuOpen ? 'open' : ''}`}>
+          <Link to="/" onClick={() => setIsMenuOpen(false)} style={{ color: location.pathname === '/' ? 'var(--color-primary)' : 'var(--color-text)', fontWeight: 500 }}>
             {t('nav.home')}
           </Link>
-          <Link to="/order" className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>
+          <Link to="/order" onClick={() => setIsMenuOpen(false)} className="btn btn-primary hide-mobile" style={{ padding: '0.5rem 1rem' }}>
             {t('nav.translate_now')}
           </Link>
-          <div style={{ width: '1px', height: '24px', backgroundColor: 'var(--color-border)', margin: '0 0.5rem' }}></div>
-          <Link to="/dashboard" title={t('nav.dashboard')} style={{ color: location.pathname === '/dashboard' ? 'var(--color-primary)' : 'var(--color-text)' }}>
-            <LayoutDashboard size={20} />
+          <div className="desktop-divider hide-mobile" style={{ width: '1px', height: '24px', backgroundColor: 'var(--color-border)', margin: '0 0.5rem' }}></div>
+          <Link to="/dashboard" onClick={() => setIsMenuOpen(false)} title={t('nav.dashboard')} style={{ color: location.pathname === '/dashboard' ? 'var(--color-primary)' : 'var(--color-text)' }}>
+            <LayoutDashboard size={20} style={{ display: 'inline', marginRight: '8px' }} />
+            <span className="mobile-only-text" style={{ display: 'none' }}>Dashboard</span>
           </Link>
-          <Link to="/admin" title={t('nav.admin')} style={{ color: location.pathname === '/admin' ? 'var(--color-primary)' : 'var(--color-text)' }}>
-            <Settings size={20} />
+          <Link to="/admin" onClick={() => setIsMenuOpen(false)} title={t('nav.admin')} style={{ color: location.pathname === '/admin' ? 'var(--color-primary)' : 'var(--color-text)' }}>
+            <Settings size={20} style={{ display: 'inline', marginRight: '8px' }} />
+            <span className="mobile-only-text" style={{ display: 'none' }}>Admin</span>
           </Link>
 
           {/* Language Switcher */}
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.25rem', marginLeft: '1rem', padding: '0.25rem', backgroundColor: 'var(--color-background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', padding: '0.25rem', backgroundColor: 'var(--color-background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
             <Globe size={16} className="text-muted" style={{ margin: '0 0.25rem' }} />
             <button 
               onClick={() => changeLanguage('en')}

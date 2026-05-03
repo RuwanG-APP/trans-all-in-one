@@ -68,8 +68,35 @@ export const OrderProvider = ({ children }) => {
     }
   };
 
+  const assignTranslator = async (orderId, translatorId) => {
+    try {
+      const orderRef = doc(db, 'orders', orderId);
+      await updateDoc(orderRef, {
+        translatorId: translatorId,
+        assignedAt: new Date().toISOString(),
+        status: 'assigned'
+      });
+    } catch (error) {
+      console.error("Error assigning translator:", error);
+      throw error;
+    }
+  };
+
+  const assignAgent = async (orderId, agentId) => {
+    try {
+      const orderRef = doc(db, 'orders', orderId);
+      await updateDoc(orderRef, {
+        agentId: agentId,
+        linkedAt: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Error assigning agent:", error);
+      throw error;
+    }
+  };
+
   return (
-    <OrderContext.Provider value={{ orders, addOrder, updateOrderStatus, loading }}>
+    <OrderContext.Provider value={{ orders, addOrder, updateOrderStatus, assignTranslator, assignAgent, loading }}>
       {children}
     </OrderContext.Provider>
   );

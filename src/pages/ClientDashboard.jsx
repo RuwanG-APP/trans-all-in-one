@@ -162,10 +162,21 @@ function ClientDashboard() {
                 {t(`dashboard.status.${order.status}`)}
               </div>
 
-              {order.status === 'sample_ready' && (
-                <button className="btn btn-primary" onClick={() => alert('Viewing sample...')}>
-                  {t('dashboard.view_sample')}
-                </button>
+              {order.status === 'sample_ready' && order.sampleUrl && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                  <a 
+                    href={order.sampleUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn btn-primary"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {t('dashboard.view_sample')}
+                  </a>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', textAlign: 'center' }}>
+                    Opens in new tab
+                  </span>
+                </div>
               )}
 
               {order.status === 'balance_pending' && (

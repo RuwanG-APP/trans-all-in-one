@@ -17,12 +17,12 @@ function Home() {
         marginBottom: 'var(--spacing-xl)',
         boxShadow: 'var(--shadow-lg)'
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: 'var(--spacing-xl)' }}>
-          <h1 style={{ fontSize: '3rem', marginBottom: 'var(--spacing-md)' }}>{t('home.title')}</h1>
-          <p style={{ fontSize: '1.2rem', marginBottom: 'var(--spacing-xl)', opacity: 0.9 }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: 'var(--spacing-xl) var(--spacing-md)' }}>
+          <h1 className="hero-title" style={{ fontSize: '3rem', marginBottom: 'var(--spacing-md)' }}>{t('home.title')}</h1>
+          <p className="hero-subtitle" style={{ fontSize: '1.2rem', marginBottom: 'var(--spacing-xl)', opacity: 0.9 }}>
             {t('home.subtitle')}
           </p>
-          <div className="flex justify-center gap-md">
+          <div className="flex justify-center gap-md flex-col-mobile">
             <Link to="/order" className="btn" style={{ backgroundColor: 'var(--color-accent)', color: 'white', fontSize: '1.1rem', padding: '1rem 2rem' }}>
               {t('home.start_btn')}
             </Link>

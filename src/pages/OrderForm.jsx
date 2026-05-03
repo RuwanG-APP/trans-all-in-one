@@ -140,19 +140,12 @@ function OrderForm() {
         <form onSubmit={handleSubmit}>
           {step === 1 && (
             <div className="animate-fade-in">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
-                <div className="form-group">
-                  <label className="form-label">{t('order.full_name')}</label>
-                  <input type="text" name="name" className="form-input" value={formData.name} onChange={handleInputChange} />
-                  {errors.name && <span className="form-error">{errors.name}</span>}
-                </div>
-                <div className="form-group">
-                  <label className="form-label">{t('order.whatsapp')}</label>
-                  <input type="text" name="whatsapp" className="form-input" placeholder="07xxxxxxxx" value={formData.whatsapp} onChange={handleInputChange} />
-                  {errors.whatsapp && <span className="form-error">{errors.whatsapp}</span>}
-                </div>
+              <div className="form-group">
+                <label className="form-label">{t('order.full_name')}</label>
+                <input type="text" name="name" className="form-input" value={formData.name} onChange={handleInputChange} />
+                {errors.name && <span className="form-error">{errors.name}</span>}
               </div>
-              
+
               <div className="form-group">
                 <label className="form-label">{t('order.email')}</label>
                 <input type="email" name="email" className="form-input" value={formData.email} onChange={handleInputChange} />
@@ -163,6 +156,12 @@ function OrderForm() {
                 <label className="form-label">{t('order.address')}</label>
                 <textarea name="address" className="form-textarea" rows="2" value={formData.address} onChange={handleInputChange}></textarea>
                 {errors.address && <span className="form-error">{errors.address}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">{t('order.whatsapp')}</label>
+                <input type="text" name="whatsapp" className="form-input" placeholder="07xxxxxxxx" value={formData.whatsapp} onChange={handleInputChange} />
+                {errors.whatsapp && <span className="form-error">{errors.whatsapp}</span>}
               </div>
 
               <div className="form-group">
@@ -202,7 +201,7 @@ function OrderForm() {
             <div className="animate-fade-in">
               <div className="form-group mb-lg">
                 <label className="form-label">{t('order.delivery_q')}</label>
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                <div className="flex-col-mobile" style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', padding: '1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', flex: 1, backgroundColor: formData.deliveryMethod === 'soft_copy' ? 'var(--color-primary-light)' : 'transparent', color: formData.deliveryMethod === 'soft_copy' ? 'white' : 'var(--color-text)' }}>
                     <input type="radio" name="deliveryMethod" value="soft_copy" checked={formData.deliveryMethod === 'soft_copy'} onChange={handleInputChange} style={{ display: 'none' }} />
                     <CheckCircle size={20} style={{ opacity: formData.deliveryMethod === 'soft_copy' ? 1 : 0.2 }} />
@@ -287,18 +286,32 @@ function OrderForm() {
                 <p style={{ marginBottom: '1.5rem', opacity: 0.9 }}>
                   Click the button below to send us a quick message. This helps us process your order immediately.
                 </p>
-                <button type="button" className="btn" style={{ backgroundColor: 'white', color: formData.priority === 'emergency' ? '#ef4444' : 'var(--color-primary)', fontWeight: 'bold', fontSize: '1.1rem', padding: '0.75rem 2rem', width: '100%', maxWidth: '300px' }} onClick={() => {
-                  const adminNumber = '94760829235';
-                  let message = '';
-                  if (formData.priority === 'emergency') {
-                    message = encodeURIComponent(`🚨 *URGENT: New Emergency Translation Request!* 🚨\nRef ID: ${placedOrderId}\nName: ${formData.name}\nDoc: ${selectedDoc.id}`);
-                  } else {
-                    message = encodeURIComponent(`✅ *New Translation Request!*\nRef ID: ${placedOrderId}\nName: ${formData.name}\nDoc: ${selectedDoc.id}`);
-                  }
-                  window.open(`https://wa.me/${adminNumber}?text=${message}`, '_blank');
-                }}>
+                <a 
+                  href={`https://wa.me/94760829235?text=${encodeURIComponent(
+                    formData.priority === 'emergency' 
+                    ? `🚨 *URGENT: New Emergency Translation Request!* 🚨\nRef ID: ${placedOrderId}\nName: ${formData.name}\nDoc: ${selectedDoc.id}`
+                    : `✅ *New Translation Request!*\nRef ID: ${placedOrderId}\nName: ${formData.name}\nDoc: ${selectedDoc.id}`
+                  )}`}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="btn" 
+                  style={{ 
+                    backgroundColor: 'white', 
+                    color: formData.priority === 'emergency' ? '#ef4444' : 'var(--color-primary)', 
+                    fontWeight: 'bold', 
+                    fontSize: '1.1rem', 
+                    padding: '0.75rem 2rem', 
+                    width: '100%', 
+                    maxWidth: '300px',
+                    textDecoration: 'none',
+                    display: 'inline-flex'
+                  }}
+                >
                   Send WhatsApp Message
-                </button>
+                </a>
+                <p style={{ marginTop: '1rem', fontSize: '0.85rem', opacity: 0.8 }}>
+                  Note: After sending the message, you can switch back to this tab.
+                </p>
               </div>
 
               <button type="button" className="btn btn-secondary" onClick={() => navigate('/dashboard')} style={{ width: '100%', maxWidth: '300px' }}>
